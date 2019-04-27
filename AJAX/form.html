@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student Payment Form</title>
+    <style>
+
+      input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+      }
+
+      select {
+        width: 100%;
+        padding: 16px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #f1f1f1;
+        font-size:14px;
+        margin-top: 7px;
+        margin-bottom: 7px;
+
+      }
+
+      input[type=button], input[type=submit], input[type=reset] {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+
+      .success {
+        font-size: 20px;
+        color: green;
+      }
+
+      .error {
+      	font-size: 20px;
+      	color: red;
+      }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  </head>
+<body>
+
+  <!-- Form solution code here !-->
+  <form>
+    <h1>Student Payment Form</h1>
+    First Name
+    <br/>
+    <input type="text" id="firstname"> <br />
+    Last Name
+    <br/> 
+    <input type="text" id="lastname"> <br />
+    Student ID
+    <br/> 
+    <input type="text" id="studentID"> <br />
+    Tuition
+    <br/> 
+    <input type="text" id="tuition"> <br />
+    Payment Method
+    <br/> 
+  </form>
+
+  <select name="pmethod" id="paymentmethod">
+    <option value="Credit">Credit</option>
+    <option value="Debit">Debit</option>
+    <option value="Cash">Cash</option>
+    <option value="Bitcoin">Bitcoin</option>
+  </select>
+  <br />
+
+<input type ="submit" id="submit">
+<input type ="button" value = "Random" id="random">
+<input type ="button" value = "Log" id = "log">
+
+<script>
+
+  // JavaScript solution code here
+$(document).ready(function (){
+
+  $("#submit").click(
+    function()
+      {
+        var errormsg = "";
+        var firstName = $("#firstname").val();
+        var lastName = $("#lastname").val();
+        var studentId = $("#studentID").val();
+        var tuitNum = $("#tuition").val();
+        var payNum = $("#paymentmethod").val();
+
+        var notNumbers = /^[A-z]+$/;
+
+        if (firstName.length < 2)
+        {
+          errormsg += '<li style="color:red"> First name must be 2 or more characters in length.</li>';          
+        }
+        if (lastName.length < 3 || lastName.length > 15)
+        {
+          errormsg += '<li style="color:red">Last name must be between 3 and 12 characters in length.</li>';          
+        }
+        if (studentId.length != 9)
+        {
+          errormsg += '<li style="color:red">Student id must be exactly 9 characters in length.</li>';          
+        }
+        if (tuitNum < 2000 || tuitNum > 10000 || tuitNum.match(notNumbers))
+        {
+          errormsg += '<li style="color:red">Tuition must be between 2000 and 10000.</li>';          
+        }
+        if (errormsg.length == 0)
+        {
+          errormsg += '<p style="color:green">Payment Successful!</p>';     
+          $.get("http://localhost:3000/submit/"+firstName+"/"+lastName+"/"+studentId+"/"+tuitNum+"/"+payNum,null,          
+          function() {
+           document.getElementById("erroroutput").innerHTML = errormsg;
+          });     
+        }else{
+          console.log("Error saving data.");
+          document.getElementById("erroroutput").innerHTML = errormsg;
+        }
+      }
+    );
+
+
+
+    $("#random").click(function() {
+        $.get("http://localhost:3000/random",
+              null,
+              function(data) {
+                $("#firstname").val(data.firstname);
+                $("#lastname").val(data.lastname);
+                $("#studentID").val(data.studentid);
+                $("#tuition").val(data.tuition);
+                $("#paymentmethod").val(data.method);
+              },
+              "json");
+      });
+
+
+    $("#log").click(
+    function()
+      {
+        window.location.href = "log.txt";
+      }
+    );
+});
+</script>
+ <div id="erroroutput"></div>
+</body>
+</html>

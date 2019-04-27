@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<head>
+  <title>Employee Management Application</title>
+  <style>
+    td {border: 1px solid black;}
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Employee Management Application</h1>
+  <h2>Employee records</h2>
+  <table class="table">
+    <tr>
+      <th>ID <a href="/asc/rowid"><i class="fa fa-fw fa-sort-asc"></i></a><a href="/desc/rowid"><i class="fa fa-fw fa-sort-desc"></i></a> </th>
+      <th>First Name<a href="/asc/firstname"><i class="fa fa-fw fa-sort-asc"></i></a><a href="/desc/firstname"><i class="fa fa-fw fa-sort-desc"></i></a>  </th>
+      <th>Last Name<a href="/asc/lastname"><i class="fa fa-fw fa-sort-asc"></i></a><a href="/desc/lastname"><i class="fa fa-fw fa-sort-desc"></i></a> </th>
+      <th>Salary<a href="/asc/salary"><i class="fa fa-fw fa-sort-asc"></i></a><a href="/desc/salary"><i class="fa fa-fw fa-sort-desc"></i></a>  </th>
+      <th>Role<a href="/asc/role"><i class="fa fa-fw fa-sort-asc"></i></a><a href="/desc/role"><i class="fa fa-fw fa-sort-desc"></i></a> </th>
+      <th>Delete</th>
+      <th>Update</th>
+      <th>Promotion</th>
+    </tr>
+    {{#employees}}
+    <tr>
+      <td>{{rowid}}</td>
+      <td>{{firstname}}</td>
+      <td>{{lastname}}</td>
+      <td>{{salary}}</td>
+      <td>{{role}}</td>
+      <td><a href="/delete/{{rowid}}">D</a></td>
+      <td><a href="/updateform/{{rowid}}">U</a></td>
+      <td><a href="/promoteEmployee/{{rowid}}">P</a></td>
+    </tr>
+    {{/employees}}
+  </table>
+  <p><a href="/addform">Add employee</a>
+  <p><a href="/layoff">Layoff employee</a>
+  <p><a href="/random">Random employee</a>
+  {{#addemployee}}
+    <form action="/addemployee">
+    {{#fnameinput}}
+      <label for="firstname">First Name</label>
+      <input type="text" class="form-control" name="firstname" value="{{firstname}}"> <br />
+      {{/fnameinput}}
+      {{#lnameinput}}
+      <label for="lastname">Last Name</label>
+      <input type="text" class="form-control" name="lastname" value="{{lastname}}"> <br />
+      {{/lnameinput}}
+      {{#salaryinput}}
+      <label for="salary">Salary</label>
+      <input type="text" class="form-control"  name="salary" value="{{salary}}"> <br />
+      {{/salaryinput}}
+       <select name="role" id="role">
+        <option value="Tester">Tester</option>
+        <option value="Manager">Manager</option>
+        <option value="Developer">Developer</option>
+      </select>
+      <input type="submit" class="btn-primary">
+    </form>
+  {{/addemployee}}
+  {{#updateemployee}}
+    <form action="/updateemployee/{{updateid}}">
+    {{#fnameinput}}
+      <label for="firstname">First Name</label>
+      <input type="text" class="form-control" value="{{formdata.firstname}}" name="firstname"> <br />
+      {{/fnameinput}}
+      {{#lnameinput}}
+      <label for="lastname">Last Name</label>
+      <input type="text" class="form-control" value="{{formdata.lastname}}" name="lastname"> <br />
+      {{/lnameinput}}
+      {{#salaryinput}}
+      <label for="salary">Salary</label>
+      <input type="text" class="form-control" value="{{formdata.salary}}" name="salary"> <br />
+        {{/salaryinput}}
+      <select name="role"  id="role">
+        <option value="Tester">Tester</option>
+        <option value="Manager">Manager</option>
+        <option value="Developer">Developer</option>
+      </select>
+      <input type="submit" class="btn-primary">
+    </form>
+  {{/updateemployee}}
+  {{#validfn}}
+      <ul>
+      <div class="alert alert-danger" role="alert">
+        <li>First name cannot be empty.</li>
+      </div>
+      </ul>
+  {{/validfn}}  
+  {{#validln}}
+      <ul>
+      <div class="alert alert-danger" role="alert">
+        <li>Last name cannot be empty.</li>
+      </div>
+      </ul>
+  {{/validln}}  
+  {{#validsal}}
+      <ul>
+      <div class="alert alert-danger" role="alert">
+        <li>Salary cannot be empty.</li>
+      </div>
+      </ul>
+  {{/validsal}}  
+
+</body>
+</html>

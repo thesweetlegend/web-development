@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auction (Auctioneer)</title>
+  </head>
+  <body>
+    <h1>Auctioneer</h1>
+    <h1 id="timer"></h1>
+    <form id="auctionner" action="">
+      <label for="item">Item Description:</label> <input type="text" id="item"> <br />
+      <label for="price">Starting Bid Price:</label> <input type="text" id="price"> <br />
+      <input type="submit">
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+    
+    // Make the connection
+    var socket = io();
+    // submit handler
+ 
+    $("#auctionner").submit( function(){
+      // submit a question message
+      socket.emit("submitquestion",
+       {item: $("#item").val(),
+        price: $("#price").val()
+       });
+  
+      // override the default submit behaviour
+      return false;
+
+    })
+ 
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+

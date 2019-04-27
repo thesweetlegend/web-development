@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auction (Bidder) </title>
+  </head>
+  <body>
+    <h1>Bidder</h1>
+    <h1 id="timer"></h1>
+    <div id="message">Waiting for auction to begin!</div>
+    <div id="correctans"></div>
+    <div id="bidder"></div>
+    <form id="bid" action="">
+      <label for="name">Name:</label> <input type="text" id="name"> <br />
+      <label for="answer">Bid:</label> <input type="text" id="answer"> <br />
+      <input type="submit">
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+
+      // Make the connection
+      var socket = io();
+      var time = -5;
+      // If a question is received, add it to the HTML page
+      socket.on("deliverquestion", function(ques)
+      {
+        time = 30;
+        $("#message").html("Item Description: " + ques.item);
+        $("#correctans").html("Bid Price: " + ques.price);
+        $("#bidder").html("Starting Bid");
+      });
+
+      // Submit the answer, if user clicks submit button
+      $("#bid").submit(function(){
+        console.log($("#answer").val());
+        // Send message to the server with the answer
+        socket.emit("answerquestion",{name: $("#name").val(),
+        bid: $("#answer").val()
+
+       });
+
+        // Override the default form submit behaviour
+        return false;
+
+      });
+
+      // If a result is received, show the user...
+      socket.on("resultquestion", function(msg) {
+        $("#message").html("Item Description: " + msg.item);
+        $("#correctans").html("Bid Price: " + msg.price);
+        $("#bidder").html("Top Bidder: " + msg.name);
+      });
+
+      function updateTimer()
+      {
+        if(time != -5){
+          time = time - 1;
+          document.getElementById("timer").innerHTML = 
+          "Timer: " + time;
+        }
+        
+
+         if (time != 0)
+        {
+          setTimeout(
+            updateTimer, 
+            1000);
+        } 
+        else if ((time == 0 )&&( time != -5))
+        {
+          document.getElementById("timer").innerHTML = 
+          "Auction Complete!";
+          time = -5;
+          setTimeout(function(){
+            $("#message").html("Waiting for auction to begin!");
+          $("#correctans").html("");
+          $("#bidder").html("");
+          $("#timer").html("");
+          },1000);
+        }
+      }
+  updateTimer();
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+ 

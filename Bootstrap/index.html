@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Thadchayani's Assignment 2</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]--> 
+  </head>
+  <body>
+    <h1>Assignment 2</h1>
+    <div class="container">
+      <form name="myForm" onsubmit="return validateForm()">
+        <div class="form-group" id="formErrorUsername">
+          <label class="control-label" for="exampleUsername" id="exampleUsernameText">Username</label>
+          <input type="text" class="form-control" name="exampleUsername" id="exampleUsername" placeholder="Username" value=''>
+        </div>
+        <div class="form-group" id="formErrorPassword">
+          <label class="control-label" for="examplePassword">Password</label>
+          <input type="password" class="form-control" name="examplePassword" id="examplePassword" placeholder="Password" value="">
+        </div>
+        <div class="form-group" id="formErrorConfirm">
+          <label class="control-label" for="confirmPassword">Confirm Password</label>
+          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Password" value="">
+        </div>
+        <div class="form-group" id="formErrorAge">
+          <label class="control-label" for="exampleAge">Age</label>
+          <input type="text" class="form-control" name="exampleAge" id="exampleAge" placeholder="Age" value="">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-default" onClick="window.location.reload()" >Reset</button>
+        <div class="container">
+        <div class="row" id="error-container">
+          <div class="span12">
+            </br>  
+            <div id="errorOutput">
+            </div>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+      function validateForm() {
+        var notLetters = /^[0-9.!@#$%^&*()_+-=]+$/g;
+        var notNumbers = /^[A-z]+$/;
+        var emptyString = /^ *$/;
+
+        var formErrUser = document.getElementById("formErrorUsername");
+        var formErrPass = document.getElementById("formErrorPassword");
+        var formErrConf = document.getElementById("formErrorConfirm");
+        var formErrAge = document.getElementById("formErrorAge");
+
+        var username = document.getElementById("exampleUsername").value;
+        var password = document.getElementById("examplePassword").value;
+        var confirm = document.getElementById("confirmPassword").value;
+        var age = document.getElementById("exampleAge").value;
+        var error = '';
+
+        if ((age < 18) || (age > 110) || age==null || age=="" || age.match(notNumbers) || age.match(emptyString))
+        {
+          if((age < 18) || (age > 110)){
+          formErrAge.classList.remove("has-success");
+          formErrAge.classList.add("has-error");
+          error +=
+            '<li>Age should be between the values 18 and 110.</li>';
+          }
+          if(age==null || age==""){
+            formErrAge.classList.remove("has-success");
+            formErrAge.classList.add("has-error");
+            error +=
+              '<li>Age field has been left blank.</li>';
+          }
+          if(age.match(notNumbers)){
+            formErrAge.classList.remove("has-success");
+            formErrAge.classList.add("has-error");
+            error +=
+              '<li>Age should be positive integers only.</li>';
+          }
+          if(age.match(emptyString)){
+            formErrAge.classList.remove("has-success");
+            formErrAge.classList.add("has-error");
+            error +=
+              '<li>Age should be positive integers only.</li>';
+          }
+        }
+        else{
+          formErrAge.classList.remove("has-error");          
+          formErrAge.classList.add("has-success");
+        }
+
+        if (username==null || username=="" || (username.length < 5) || (username.length > 15) || username.match(notLetters) || 
+          username.match(emptyString))
+        {
+          if(username==null || username==""){
+          formErrUser.classList.remove("has-success");
+          formErrUser.classList.add("has-error");
+          error +=
+            '<li>Username field has been left blank.</li>';
+          }
+
+          if ((username.length < 5) || (username.length > 15))
+          {
+            formErrUser.classList.remove("has-success");
+            formErrUser.classList.add("has-error");
+            error +=
+              '<li>Username must be greater than 5 and less than 15 characters</li>';
+          }
+
+          if (username.match(notLetters))
+          {
+            formErrUser.classList.remove("has-success");
+            formErrUser.classList.add("has-error");
+            error +=
+              '<li>Username should contain the characters A-Z (uppercase or lowercase).</li>';
+          }
+          if (username.match(emptyString))
+          {
+            formErrUser.classList.remove("has-success");
+            formErrUser.classList.add("has-error");
+            error +=
+              '<li>Username should contain the characters A-Z (uppercase or lowercase).</li>';
+          }
+        }
+        else{
+          formErrUser.classList.remove("has-error");          
+          formErrUser.classList.add("has-success");
+        }
+
+        if (password==null || password=="" || confirm==null || confirm=="" || password !== confirm)
+        {
+          if(password==null || password==""){
+            formErrPass.classList.remove("has-success");
+            formErrPass.classList.add("has-error");
+            error +=
+              '<li>Password field has been left blank.</li>';
+          }
+          
+          if(confirm==null || confirm==""){
+            formErrConf.classList.remove("has-success");
+            formErrConf.classList.add("has-error");
+            error +=
+              '<li>Confirm field has been left blank.</li>';
+          }
+
+          if(password !== confirm){
+            formErrPass.classList.remove("has-success");
+            formErrConf.classList.remove("has-success");
+            formErrPass.classList.add("has-error");
+            formErrConf.classList.add("has-error");
+            error += 
+              '<li>Password and confirm do not match.</li>';
+          }
+        }
+        else{
+          formErrPass.classList.remove("has-error");
+          formErrConf.classList.remove("has-error");
+          formErrPass.classList.add("has-success");
+          formErrConf.classList.add("has-success");
+        }
+
+        document.getElementById("errorOutput").innerHTML = error;
+    
+        if (error.length < 1) {
+          document.getElementById("errorOutput").innerHTML = '<div class="alert alert-success">Form values successfully validated.';
+          formErrUser.classList.remove("has-error");
+          formErrPass.classList.remove("has-error");
+          formErrConf.classList.remove("has-error");
+          formErrAge.classList.remove("has-error");
+
+          formErrUser.classList.add("has-success");
+          formErrPass.classList.add("has-success");
+          formErrConf.classList.add("has-success");
+          formErrAge.classList.add("has-success");
+        }
+        else{
+          document.getElementById("errorOutput").innerHTML = '<div class="alert alert-danger">' + error;
+          return false;
+        }
+
+        return false;
+      }
+    </script>
+
+  </body>
+</html>

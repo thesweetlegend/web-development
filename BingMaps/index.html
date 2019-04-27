@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Thadchayani's Assignment</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <style>
+    body {
+      margin: 20px;
+    }
+
+    button[type="button"]{
+      margin-right: 16px;
+      margin-bottom: 15px;
+    }
+    </style>
+    <h1>Assignment 3</h1>
+    <div id='printoutPanel'></div>
+
+    <button class="btn btn-default" type="button" id="findMe">Geolocate</button>
+    <button class="btn btn-warning" type="button" id="hospitals">Hospitals</button>
+    <button class="btn btn-danger" type="button" id="firestations">Firestations</button>
+    <button class="btn btn-success" type="button" id="schools">Schools</button>
+    <button class="btn btn-info" type="button" id="waterfalls">Waterfalls</button>
+    <button class="btn btn-default" type="button" id="clearMe">Clear</button>
+    <div id='myMap' style='width: 600px; height: 600px;'></div>
+    <div id="out"></div>
+
+    <script>
+
+      $("#hospitals").click(
+        function hospitalFind(){
+        //var locs = [hospitals];
+        //var rect = Microsoft.Maps.LocationRect.fromLocations(hospitals.LATITUDE, hospitals.LONGITUDE);
+
+          var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+
+          for (i = 0; i < hospitals.length; i++)
+              {
+                var pushpin = new Microsoft.Maps.Pushpin(
+                   new Microsoft.Maps.Location( hospitals[i].LATITUDE,
+                                                hospitals[i].LONGITUDE )
+                    , { title: hospitals[i].NAME, color: 'orange' });
+                map.entities.push(pushpin);
+              }
+
+          map.setView({mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(43.25204, -79.831387),
+            zoom: 10});
+
+        }
+
+      );
+
+      $("#firestations").click(
+        function firestationFind(){
+          var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+
+          for (i = 0; i < firestations.length; i++)
+              {
+                var pushpin = new Microsoft.Maps.Pushpin(
+                   new Microsoft.Maps.Location( firestations[i].LATITUDE,
+                                                firestations[i].LONGITUDE )
+                    , { title: firestations[i].NAME, color: 'red' });
+                map.entities.push(pushpin);
+              }
+          map.setView({mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(43.25204, -79.831387),
+            zoom: 10});
+        }
+
+      );
+
+      $("#schools").click(
+        function schoolsFind(){
+          var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+
+          for (i = 0; i < schools.length; i++)
+              {
+                var pushpin = new Microsoft.Maps.Pushpin(
+                   new Microsoft.Maps.Location( schools[i].LATITUDE,
+                                                schools[i].LONGITUDE )
+                    , { title: schools[i].NAME, color: 'green' });
+                map.entities.push(pushpin);
+              }
+          map.setView({mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(43.25204, -79.831387),
+            zoom: 10});
+        }
+
+      );
+
+      $("#waterfalls").click(
+        function waterfallsFind(){
+          var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+          for (i = 0; i < waterfalls.length; i++)
+              {
+                var pushpin = new Microsoft.Maps.Pushpin(
+                   new Microsoft.Maps.Location( waterfalls[i].LATITUDE,
+                                                waterfalls[i].LONGITUDE )
+                    , { title: waterfalls[i].NAME, color: 'aqua' });
+                map.entities.push(pushpin);
+              }
+          map.setView({mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(43.25204, -79.831387),
+            zoom: 10});
+        }
+
+      );
+
+      $("#clearMe").click(
+        function clear(){
+          var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+          for (var i = map.entities.getLength() - 1; i >= 0; i--) {
+              var pushpin = map.entities.get(i);
+              if (pushpin instanceof Microsoft.Maps.Pushpin) {
+                  map.entities.removeAt(i);
+              }
+          }
+        }
+      );
+
+      $("#findMe").click(
+        function geoFindMe()
+        {
+          var output = document.getElementById("out");
+          var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+
+          if (!navigator.geolocation){
+            output.classList.add("alert");
+            output.classList.add("alert-danger");
+            output.innerHTML = 'Geolocation is not supported by your browser';
+            return;
+          }
+
+          function success(position) {
+            var latitude  = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(position.coords.latitude,
+                                                 position.coords.longitude), { title: 'Current Location', color: 'pink' })
+
+            map.entities.push(pushpin);
+            map.setView({center:new Microsoft.Maps.Location(latitude,longitude), zoom: 15});
+          }
+
+          function error() {
+            var timeFunction;
+            timeFunction = setTimeout(timeEvent, 7000);
+            output.classList.add("alert");
+            output.classList.add("alert-danger");
+            output.innerHTML = 'Error: Location could not be found';
+            function timeEvent(){
+                output.innerHTML = '';
+                output.classList.remove("alert");
+                output.classList.remove("alert-danger");
+            }
+          }
+
+          navigator.geolocation.getCurrentPosition(success,error);
+        }
+      );
+
+      function loadMapScenario() {
+        var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});
+
+        map.setView({
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            center: new Microsoft.Maps.Location(43.25240, -79.831570),
+            zoom: 17
+        });
+      }
+
+    </script>
+
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="Hospitals.js"></script>
+    <script src="Firestations.js"></script>
+    <script src="Schools.js"></script>
+    <script src="Waterfalls.js"></script>
+    <!--<script src="redlights.js"></script>-->
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=Aq4VDb2y-j-8TTz0MMMAd77kSo0XLAqxht0sw5-MnlS8XK77_4V9QXmN4r2CUWUG&callback=loadMapScenario' async defer></script>
+  </body>
+</html>

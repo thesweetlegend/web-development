@@ -1,0 +1,31 @@
+@media screen and (max-width: 480px) {
+
+    body {
+        margin: 0;
+    }
+
+    #menu li {
+        display: block;
+  		width: 60px;
+  		background-color: green;
+  		padding: 30px;
+    }
+
+    #header {
+    	text-transform: uppercase;
+    	font-style: italic;
+    	color: green;
+    }
+
+    #articles h2 {
+    	color: green;
+    }
+
+    #sidebar h2 {
+    	color: green;
+    }
+
+    #sidebar {
+    	float: none;
+    }
+}
